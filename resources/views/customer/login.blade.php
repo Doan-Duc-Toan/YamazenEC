@@ -7,8 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    @if ($errors->has('login_error'))
-      @include('share.toast_error', ['message' => $errors->first('login_error')])
+    @if ($errors->any())
+      @if ($errors->has('login_error'))
+        @include('share.toast_error', ['message' => $errors->first('login_error')])
+      @else
+        @php
+          $message = "Thông tin nhập không đúng định dạng"
+        @endphp
+        @include('share.toast_error', ['message' => $message])
+      @endif
     @endif
     <div class="wrapper">
       <div class="title-text">
@@ -39,15 +46,19 @@
             </div>
             <div class="signup-link">Not a member? <a href="">Signup now</a></div>
           </form>
-          <form action="#" class="signup">
+          <form action="{{route('register')}}" method="POST" class="signup">
+            @csrf
             <div class="field">
-              <input type="text" placeholder="Email Address" required>
+              <input type="text" name="name" placeholder="Fullname" required>
             </div>
             <div class="field">
-              <input type="password" placeholder="Password" required>
+              <input type="text" placeholder="Phone" name="phone" required>
             </div>
             <div class="field">
-              <input type="password" placeholder="Confirm password" required>
+              <input type="text" name="email" placeholder="Email Address" required>
+            </div>
+            <div class="field">
+              <input type="password" name="password" placeholder="Password" required>
             </div>
             <div class="field btn">
               <div class="btn-layer"></div>
