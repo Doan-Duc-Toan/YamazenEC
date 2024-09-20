@@ -23,6 +23,25 @@ class LoginController extends Controller
    
    function logout(){
       Auth::logout();
-      return redirect('/login');
+      return redirect()->route('login');
+   }
+
+   function register(Request $request){
+     $validate = $request->validate([
+       'name' => 'string|min:8|required',
+       'email' => 'email|required',
+       'phone' => 'regex:/^([0-9]{10,11})$/|required',
+       'password' => 'required|min:8'   
+     ]); 
+     
+     $user = User::create([
+      'name'=> $request->get('name'),
+      'email' => $request->get('email'),
+      'phone' => $request->get('phone'),
+      'password' => Hash::make($request->get('password')),
+     ]);
+
+     Auth::login($user);
+     return redirect()->route('dashboard')->with('success', 'Đăng ký thành công!');;
    }
 }
